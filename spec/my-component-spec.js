@@ -2,11 +2,9 @@ import React from 'react';
 import sinon from 'sinon';
 import {mount} from 'enzyme';
 import Foo from '../foo.jsx';
+import jsdomGlobal from 'jsdom-global';
 
-import jsdom from 'jsdom'
-const doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
-global.document = doc;
-global.window = doc.defaultView;
+jsdomGlobal();
 
 describe('<Foo />', () => {
   it('allows us to set props', () => {
