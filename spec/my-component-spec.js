@@ -1,41 +1,34 @@
 import React from 'react';
-import {shallow} from 'enzyme';
 import sinon from 'sinon';
-import jasmineEnzyme from 'jasmine-enzyme';
-
-import MyComponent from '../my-component.jsx';
+import {mount} from 'enzyme';
 import Foo from '../foo.jsx';
 
-describe('<MyComponent />', () => {
-  beforeEach(() => {
-    jasmineEnzyme();
-  });
+import jsdom from 'jsdom'
+const doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
+global.document = doc;
+global.window = doc.defaultView;
 
-  it('renders three <Foo /> components', () => {
-    const wrapper = shallow(<MyComponent />);
-    expect(wrapper.find(Foo).length).toEqual(3);
-  });
-
-  it('renders an `.icon-star`', () => {
-    const wrapper = shallow(<MyComponent />);
-    expect(wrapper.find('.icon-star').length).toEqual(1);
-  });
-
-  it('renders children when passed in', () => {
-    const wrapper = shallow(
-      <MyComponent>
-        <div className="unique"/>
-      </MyComponent>
-    );
-    expect(wrapper.contains(<div className="unique"/>)).toBeTruthy();
+describe('<Foo />', () => {
+  it('allows us to set props', () => {
+    const wrapper = mount(<Foo bar="baz"/>);
+    expect(wrapper.props().bar).toEqual('baz');
+    wrapper.setProps({bar: 'foo'});
+    expect(wrapper.props().bar).toEqual('foo');
   });
 
   it('simulates click events', () => {
     const onButtonClick = sinon.spy();
-    const wrapper = shallow(
+    const wrapper = mount(
       <Foo onButtonClick={onButtonClick}/>
     );
     wrapper.find('button').simulate('click');
     expect(onButtonClick.callCount).toEqual(1);
+  });
+
+  it('calls componentDidMount', () => {
+    sinon.spy(Foo.prototype, 'componentDidMount');
+    const wrapper = mount(<Foo />);
+    expect(Foo.prototype.componentDidMount.callCount).toEqual(1);
+    Foo.prototype.componentDidMount.restore();
   });
 });
