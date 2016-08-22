@@ -1,7 +1,7 @@
-React Hello World Demo
-======================
+Enzyme Mount Demo
+=================
 
-Just say hello from react.
+Enzyme `mount` demo.
 
 ```
 npm install
