@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --no-info --progress --colors || exit 0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "keywords": [],
   "author": "",
